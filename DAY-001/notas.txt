@@ -1,0 +1,202 @@
+
+
+## ✅ Conteúdo do Módulo
+
+Este módulo aborda os principais **componentes da arquitetura**, **conceitos fundamentais**, **ferramentas de laboratório**, **comandos básicos** e **boas práticas operacionais** no Kubernetes.
+
+---
+
+## 🧠 1. Componentes de Controle (Control Plane)
+
+### 🔹 etcd
+
+Banco de dados distribuído que armazena **todo o estado do cluster** (configurações, nós, pods, secrets, etc).
+É o “coração” do cluster.
+
+### 🔹 kube-apiserver
+
+É a **API central do cluster**.
+Todos os comandos (`kubectl`) e componentes se comunicam com o cluster através dele.
+
+### 🔹 kube-scheduler
+
+Responsável por **decidir em qual nó cada Pod será executado**, baseado em:
+
+* Recursos disponíveis
+* Regras de afinidade
+* Restrições de hardware
+
+### 🔹 kube-controller-manager
+
+Gerencia os **controladores** do cluster, como:
+
+* ReplicaSet
+* Deployment
+* Node Controller
+* Job Controller
+  Ele garante que o estado desejado seja mantido.
+
+---
+
+## ⚙️ 2. Componentes dos Nós (Workers)
+
+### 🔹 kubelet (Agente do Nó)
+
+É o **agente que roda em cada nó**.
+Ele recebe as ordens do Cluster e garante que os containers estejam rodando corretamente.
+
+### 🔹 kube-proxy
+
+Responsável pela **parte de rede do cluster**, fazendo:
+
+* Encaminhamento de tráfego
+* Regras de iptables
+* Comunicação entre Pods e Services
+
+---
+
+## 🧪 3. Kind – Kubernetes em Ambiente Local
+
+O **Kind (Kubernetes in Docker)** é utilizado para:
+
+* Criar clusters locais
+* Rodar laboratórios
+* Testar manifests sem usar cloud
+
+### ✅ Funções principais:
+
+* Instalar o Kind
+* Criar clusters locais
+* Excluir clusters quando não forem mais necessários
+
+---
+
+## 🌐 4. Portas Utilizadas no Kubernetes
+
+| Porta       | Serviço            |
+| ----------- | ------------------ |
+| 6443        | kube-apiserver     |
+| 2379–2380   | etcd               |
+| 10250       | kubelet            |
+| 10251       | scheduler          |
+| 10252       | controller-manager |
+| 30000–32767 | NodePort           |
+
+---
+
+## 📦 5. Conceitos sobre Objetos do Kubernetes
+
+### 🔹 Pod
+
+É a **menor unidade do Kubernetes**.
+Um Pod pode conter:
+
+* 1 ou mais containers
+* Compartilham rede e armazenamento
+
+---
+
+### 🔹 Deployment
+
+Objeto responsável por:
+
+* Criar Pods automaticamente
+* Atualizações sem downtime (rolling update)
+* Controle de versões
+* Escalabilidade
+
+---
+
+### 🔹 ReplicaSet
+
+Garante que:
+
+* Sempre exista a **quantidade definida de Pods rodando**
+* Caso um Pod morra, outro é criado automaticamente
+
+> Obs.: Normalmente o ReplicaSet é gerenciado pelo Deployment.
+
+---
+
+## ⌨️ 6. Comandos Básicos
+
+### 🔹 Pods
+
+```bash
+kubectl get pods
+kubectl create -f pod.yaml
+kubectl delete pod nome-do-pod
+```
+
+---
+
+### 🔹 Services
+
+```bash
+kubectl get services
+kubectl create -f service.yaml
+kubectl delete service nome-do-service
+```
+
+---
+
+### 🔹 Namespaces
+
+```bash
+kubectl get namespace
+kubectl create namespace nome
+kubectl delete namespace nome
+```
+
+---
+
+## ⚡ 7. Autocomplete no Bash e Zsh
+
+Permite:
+
+* Completar comandos automaticamente
+* Reduzir erros de digitação
+* Aumentar a produtividade
+
+Exemplo no `zsh`:
+
+```bash
+source <(kubectl completion zsh)
+```
+
+---
+
+## 🧪 8. Uso do `dry-run`
+
+O `dry-run` é utilizado para:
+
+* **Simular comandos**
+* **Gerar arquivos YAML**
+* **Validar antes de aplicar em produção**
+
+### ✅ Exemplo:
+
+```bash
+kubectl run lab --image=nginx --dry-run=client -o yaml
+```
+
+Isso **gera o YAML sem criar o Pod**.
+
+---
+
+## 📄 9. Aplicação de Arquivos YAML (`apply`)
+
+Após criar ou editar um manifesto:
+
+```bash
+kubectl apply -f arquivo.yaml
+```
+
+Esse comando:
+
+* Cria o recurso se não existir
+* Atualiza se já existir
+
+---
+
+
